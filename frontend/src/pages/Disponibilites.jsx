@@ -14,6 +14,7 @@ export default function Disponibilites() {
   const [creneaux, setCreneaux] = useState([]);
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState("");
+  const [type, setType] = useState("Coach de vie personnel");
 
   // Charger créneaux depuis API à chaque changement de date
   const chargerCreneaux = async () => {
@@ -52,7 +53,7 @@ export default function Disponibilites() {
       await api.post("/reservations", {
         date,
         heure,
-        type: "Coach de vie personnel", // pour l’instant fixe, on améliorera après
+        type,
       });
 
       // recharge les créneaux après réservation
@@ -98,6 +99,28 @@ export default function Disponibilites() {
             />
           </div>
         </section>
+{/* Sélection du type */}
+<section className="mt-4 bg-white p-5 rounded-xl shadow-sm border">
+  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h2 className="text-lg font-semibold text-gray-800">
+        Type de rendez-vous
+      </h2>
+      <p className="text-sm text-gray-500">
+        Choisissez le service désiré.
+      </p>
+    </div>
+
+    <select
+      value={type}
+      onChange={(e) => setType(e.target.value)}
+      className="border rounded-lg px-3 py-2 text-gray-700 w-full md:w-auto"
+    >
+      <option>Coach de vie personnel</option>
+      <option>Développement de carrière</option>
+    </select>
+  </div>
+</section>
 
         {/* erreurs */}
         {erreur && (
