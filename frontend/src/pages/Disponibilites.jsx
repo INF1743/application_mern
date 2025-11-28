@@ -6,20 +6,48 @@ import { useNavigate } from "react-router-dom";
 export default function Disponibilites() {
   const navigate = useNavigate();
 
+  // Date sélectionnée
   const [date, setDate] = useState(() => {
     const d = new Date();
     return d.toISOString().substring(0, 10);
   });
 
+  // Type sélectionné via SELECT
+  const [type, setType] = useState("Coach de vie personnel");
+
   const [creneaux, setCreneaux] = useState([]);
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState("");
-  const [type, setType] = useState("Coach de vie personnel");
 
-  // Charger créneaux depuis API à chaque changement de date
+  // ==============================
+  // Vérifier si une date est passée
+  // ==============================
+  const dateEstPassee = (dateStr) => {
+    const aujourdHui = new Date();
+    aujourdHui.setHours(0, 0, 0, 0);
+
+    const dateChoisie = new Date(dateStr);
+    dateChoisie.setHours(0, 0, 0, 0);
+
+    return dateChoisie < aujourdHui;
+  };
+
+  const bloquerReservation = dateEstPassee(date);
+
+  // ==============================
+  // Charger les créneaux depuis API
+  // ==============================
   const chargerCreneaux = async () => {
     setChargement(true);
     setErreur("");
+
+    if (bloquerReservation) {
+      setCreneaux([]);
+      setErreur("Vous ne pouvez pas réserver une date passée.");
+      setChargement(false);
+      return;
+    }
+
     try {
       const res = await api.get(`/reservations/creneaux?date=${date}`);
       setCreneaux(res.data);
@@ -38,26 +66,26 @@ export default function Disponibilites() {
     // eslint-disable-next-line
   }, [date]);
 
+  // ==============================
   // Réserver un créneau
+  // ==============================
   const reserver = async (heure) => {
     setErreur("");
 
+    if (bloquerReservation) {
+      setErreur("Date passée : réservation impossible.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
-      // pas connecté → redirige login
       navigate("/login");
       return;
     }
 
     try {
-      await api.post("/reservations", {
-        date,
-        heure,
-        type,
-      });
-
-      // recharge les créneaux après réservation
-      chargerCreneaux();
+      await api.post("/reservations", { date, heure, type });
+      await chargerCreneaux();
       alert(`Réservation confirmée pour ${date} à ${heure}`);
     } catch (err) {
       setErreur(
@@ -67,6 +95,9 @@ export default function Disponibilites() {
     }
   };
 
+  // ==============================
+  // UI
+  // ==============================
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -76,10 +107,10 @@ export default function Disponibilites() {
           Disponibilités
         </h1>
         <p className="text-gray-600 mt-2">
-          Choisissez une date puis sélectionnez un créneau disponible.
+          Choisissez une date, un type de rendez-vous et un créneau disponible.
         </p>
 
-        {/* sélection date */}
+        {/* --- SÉLECTION DATE --- */}
         <section className="mt-6 bg-white p-5 rounded-xl shadow-sm border">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -87,7 +118,7 @@ export default function Disponibilites() {
                 Sélectionner une date
               </h2>
               <p className="text-sm text-gray-500">
-                Les créneaux sont chargés depuis l’API.
+                Les créneaux sont chargés automatiquement.
               </p>
             </div>
 
@@ -99,45 +130,49 @@ export default function Disponibilites() {
             />
           </div>
         </section>
-{/* Sélection du type */}
-<section className="mt-4 bg-white p-5 rounded-xl shadow-sm border">
-  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div>
-      <h2 className="text-lg font-semibold text-gray-800">
-        Type de rendez-vous
-      </h2>
-      <p className="text-sm text-gray-500">
-        Choisissez le service désiré.
-      </p>
-    </div>
 
-    <select
-      value={type}
-      onChange={(e) => setType(e.target.value)}
-      className="border rounded-lg px-3 py-2 text-gray-700 w-full md:w-auto"
-    >
-      <option>Coach de vie personnel</option>
-      <option>Développement de carrière</option>
-    </select>
-  </div>
-</section>
+        {/* --- SÉLECTION TYPE (SELECT) --- */}
+        <section className="mt-4 bg-white p-5 rounded-xl shadow-sm border">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-800">
+                Type de rendez-vous
+              </h2>
+              <p className="text-sm text-gray-500">
+                Choisissez le service désiré.
+              </p>
+            </div>
 
-        {/* erreurs */}
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-gray-700 w-full md:w-auto"
+            >
+              <option>Coach de vie personnel</option>
+              <option>Développement de carrière</option>
+            </select>
+          </div>
+        </section>
+
+        {/* --- ERREURS --- */}
         {erreur && (
           <div className="mt-4 bg-red-100 text-red-700 p-3 rounded text-sm">
             {erreur}
           </div>
         )}
 
-        {/* liste créneaux */}
+        {/* --- LISTE DES CRENEAUX --- */}
         <section className="mt-8">
           <h2 className="text-xl font-bold text-gray-900">
-            Créneaux disponibles le{" "}
-            {new Date(date).toLocaleDateString("fr-CA")}
+            Créneaux disponibles le {new Date(date).toLocaleDateString("fr-CA")}
           </h2>
 
           {chargement ? (
             <p className="mt-4 text-gray-600">Chargement des créneaux...</p>
+          ) : creneaux.length === 0 ? (
+            <p className="mt-4 text-gray-500">
+              Aucun créneau disponible pour cette date.
+            </p>
           ) : (
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               {creneaux.map((c, idx) => (
@@ -161,9 +196,9 @@ export default function Disponibilites() {
                   </div>
 
                   <button
-                    disabled={!c.dispo}
+                    disabled={!c.dispo || bloquerReservation}
                     className={`px-4 py-2 rounded-md font-semibold ${
-                      c.dispo
+                      c.dispo && !bloquerReservation
                         ? "bg-orange-400 hover:bg-orange-500 text-white"
                         : "bg-gray-300 text-gray-600 cursor-not-allowed"
                     }`}

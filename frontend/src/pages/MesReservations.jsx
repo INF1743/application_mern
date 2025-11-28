@@ -9,6 +9,7 @@ export default function MesReservations() {
   const [reservations, setReservations] = useState([]);
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState("");
+  const [estAdmin, setEstAdmin] = useState(false);
 
   const chargerReservations = async () => {
     setChargement(true);
@@ -34,6 +35,19 @@ export default function MesReservations() {
   };
 
   useEffect(() => {
+    // Détecter si l'utilisateur est admin à partir du localStorage
+    const utilisateurJSON = localStorage.getItem("utilisateur");
+    if (utilisateurJSON) {
+      try {
+        const utilisateur = JSON.parse(utilisateurJSON);
+        if (utilisateur?.role === "admin") {
+          setEstAdmin(true);
+        }
+      } catch (e) {
+        console.error("Erreur lors de la lecture de l'utilisateur :", e);
+      }
+    }
+
     chargerReservations();
     // eslint-disable-next-line
   }, []);
@@ -47,8 +61,7 @@ export default function MesReservations() {
       chargerReservations();
     } catch (err) {
       setErreur(
-        err?.response?.data?.message ||
-          "Erreur lors de l'annulation."
+        err?.response?.data?.message || "Erreur lors de l'annulation."
       );
     }
   };
@@ -77,6 +90,21 @@ export default function MesReservations() {
         <p className="text-gray-600 mt-2">
           Retrouvez ici vos rendez-vous passés et à venir.
         </p>
+
+        {/* 🔧 Bouton admin : Messages d’aide */}
+        {estAdmin && (
+          <div className="mt-4">
+            <button
+              onClick={() => navigate("/admin/messages-aide")}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 text-white text-sm hover:bg-slate-700 transition-colors"
+            >
+              <span className="w-7 h-7 rounded bg-white/10 flex items-center justify-center">
+                🛠️
+              </span>
+              Messages d’aide
+            </button>
+          </div>
+        )}
 
         {/* Erreur */}
         {erreur && (

@@ -1,13 +1,15 @@
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer"; // ✅ Ajouter le footer
 import heroImage from "../assets/hero.jpg";
 
 export default function Accueil() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen flex flex-col bg-white">
+      {/* NAVBAR */}
       <Navbar />
 
-      {/* HERO SECTION */}
-      <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0">
+      {/* CONTENU PRINCIPAL */}
+      <main className="flex-1 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-0">
         
         {/* Colonne gauche : image */}
         <div className="w-full h-[420px] md:h-[650px] bg-gray-100">
@@ -82,6 +84,9 @@ export default function Accueil() {
           </div>
         </div>
       </main>
+
+      {/* FOOTER */}
+      <Footer /> {/* ✅ Pied de page moderne */}
     </div>
   );
 }
