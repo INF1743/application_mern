@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function MesReservations() {
   const navigate = useNavigate();
@@ -10,6 +11,21 @@ export default function MesReservations() {
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState("");
   const [estAdmin, setEstAdmin] = useState(false);
+
+  // 🔎 Filtres
+  const [filtreStatut, setFiltreStatut] = useState("TOUS"); // TOUS | CONFIRMEES | EN_ATTENTE | ANNULEES
+  const [filtreTemps, setFiltreTemps] = useState("TOUS");   // TOUS | A_VENIR | PASSEES
+
+  // ✅ Correction du bug J-1 : formatage manuel de la date
+  const formaterDate = (dateStr) => {
+    if (!dateStr) return "";
+
+    // On prend uniquement "YYYY-MM-DD"
+    const iso = dateStr.slice(0, 10);
+    const [annee, mois, jour] = iso.split("-");
+
+    return `${jour}/${mois}/${annee}`;
+  };
 
   const chargerReservations = async () => {
     setChargement(true);
@@ -35,7 +51,7 @@ export default function MesReservations() {
   };
 
   useEffect(() => {
-    // Détecter si l'utilisateur est admin à partir du localStorage
+    // Vérification admin
     const utilisateurJSON = localStorage.getItem("utilisateur");
     if (utilisateurJSON) {
       try {
@@ -44,12 +60,11 @@ export default function MesReservations() {
           setEstAdmin(true);
         }
       } catch (e) {
-        console.error("Erreur lors de la lecture de l'utilisateur :", e);
+        console.error("Erreur lecture utilisateur :", e);
       }
     }
 
     chargerReservations();
-    // eslint-disable-next-line
   }, []);
 
   const annuler = async (id) => {
@@ -57,7 +72,6 @@ export default function MesReservations() {
 
     try {
       await api.patch(`/reservations/${id}/annuler`);
-      // Recharger après annulation
       chargerReservations();
     } catch (err) {
       setErreur(
@@ -79,6 +93,34 @@ export default function MesReservations() {
     }
   };
 
+  // ========= Aide pour le filtre par date =========
+  const estDansLeFutur = (r) => {
+    if (!r?.date) return false;
+    const aujourdHui = new Date();
+    aujourdHui.setHours(0, 0, 0, 0);
+
+    const d = new Date(r.date);
+    d.setHours(0, 0, 0, 0);
+
+    return d >= aujourdHui;
+  };
+
+  // ========= Application des filtres =========
+  const reservationsAffichees = reservations
+    // Filtre statut
+    .filter((r) => {
+      if (filtreStatut === "CONFIRMEES") return r.statut === "Confirmée";
+      if (filtreStatut === "EN_ATTENTE") return r.statut === "En attente";
+      if (filtreStatut === "ANNULEES") return r.statut === "Annulée";
+      return true; // TOUS
+    })
+    // Filtre temps
+    .filter((r) => {
+      if (filtreTemps === "A_VENIR") return estDansLeFutur(r);
+      if (filtreTemps === "PASSEES") return !estDansLeFutur(r);
+      return true; // TOUS
+    });
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -91,7 +133,7 @@ export default function MesReservations() {
           Retrouvez ici vos rendez-vous passés et à venir.
         </p>
 
-        {/* 🔧 Bouton admin : Messages d’aide */}
+        {/* 🔧 Bouton admin */}
         {estAdmin && (
           <div className="mt-4">
             <button
@@ -106,6 +148,43 @@ export default function MesReservations() {
           </div>
         )}
 
+        {/* 🎚️ Barre de filtres */}
+        <section className="mt-6 bg-white p-4 rounded-xl shadow-sm border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-800">
+              Filtres d’affichage
+            </h2>
+            <p className="text-xs text-gray-500">
+              Ajustez les filtres pour afficher les rendez-vous souhaités.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Filtre statut */}
+            <select
+              value={filtreStatut}
+              onChange={(e) => setFiltreStatut(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-sm text-gray-700"
+            >
+              <option value="TOUS">Tous les statuts</option>
+              <option value="CONFIRMEES">Seulement confirmés</option>
+              <option value="EN_ATTENTE">Seulement en attente</option>
+              <option value="ANNULEES">Seulement annulés</option>
+            </select>
+
+            {/* Filtre temps */}
+            <select
+              value={filtreTemps}
+              onChange={(e) => setFiltreTemps(e.target.value)}
+              className="border rounded-lg px-3 py-2 text-sm text-gray-700"
+            >
+              <option value="TOUS">Toutes les dates</option>
+              <option value="A_VENIR">Rendez-vous à venir</option>
+              <option value="PASSEES">Rendez-vous passés</option>
+            </select>
+          </div>
+        </section>
+
         {/* Erreur */}
         {erreur && (
           <div className="mt-4 bg-red-100 text-red-700 p-3 rounded text-sm">
@@ -113,21 +192,21 @@ export default function MesReservations() {
           </div>
         )}
 
-        {/* Chargement */}
+        {/* Loading / contenu */}
         {chargement ? (
           <p className="mt-8 text-gray-600">Chargement...</p>
-        ) : reservations.length === 0 ? (
+        ) : reservationsAffichees.length === 0 ? (
           <div className="mt-8 bg-white p-8 rounded-xl shadow-sm border text-center">
             <p className="text-gray-700 font-medium">
-              Vous n’avez aucune réservation pour le moment.
+              Aucune réservation à afficher avec les filtres actuels.
             </p>
             <p className="text-sm text-gray-500 mt-2">
-              Allez sur Disponibilités pour réserver un créneau.
+              Essayez de modifier les filtres ou de réserver un nouveau créneau.
             </p>
           </div>
         ) : (
           <>
-            {/* Tableau desktop */}
+            {/* TABLEAU DESKTOP */}
             <div className="hidden md:block mt-8 bg-white rounded-xl shadow-sm border overflow-hidden">
               <table className="w-full">
                 <thead className="bg-slate-700 text-white">
@@ -140,11 +219,9 @@ export default function MesReservations() {
                   </tr>
                 </thead>
                 <tbody>
-                  {reservations.map((r) => (
+                  {reservationsAffichees.map((r) => (
                     <tr key={r._id} className="border-t">
-                      <td className="p-4">
-                        {new Date(r.date).toLocaleDateString("fr-CA")}
-                      </td>
+                      <td className="p-4">{formaterDate(r.date)}</td>
                       <td className="p-4">{r.heure}</td>
                       <td className="p-4">{r.type}</td>
                       <td className="p-4">
@@ -174,16 +251,16 @@ export default function MesReservations() {
               </table>
             </div>
 
-            {/* Cartes mobile */}
+            {/* VERSION MOBILE */}
             <div className="md:hidden mt-8 flex flex-col gap-4">
-              {reservations.map((r) => (
+              {reservationsAffichees.map((r) => (
                 <div
                   key={r._id}
                   className="bg-white p-5 rounded-xl shadow-sm border"
                 >
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-gray-900">
-                      {new Date(r.date).toLocaleDateString("fr-CA")} • {r.heure}
+                      {formaterDate(r.date)} • {r.heure}
                     </p>
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-semibold ${badgeStyle(
@@ -210,6 +287,8 @@ export default function MesReservations() {
           </>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -1,121 +1,101 @@
+// src/components/Footer.jsx
 import { Link } from "react-router-dom";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Facebook,
-  Instagram,
-  Linkedin,
-} from "lucide-react";
 
 export default function Footer() {
-  const annee = new Date().getFullYear();
-
   return (
-    <footer className="bg-slate-900 text-gray-300 mt-12">
-      {/* Partie principale */}
-      <div className="max-w-6xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-3">
-        {/* Colonne 1 : Branding */}
+    <footer className="bg-slate-900 text-slate-100 mt-12">
+      {/* Contenu principal */}
+      <div className="max-w-6xl mx-auto px-6 md:px-10 py-10 md:py-12 grid gap-8 md:grid-cols-3">
+
+        {/* Colonne 1 : Identité */}
         <div>
-          <h2 className="text-xl font-bold text-white tracking-wide">
-            Coach<span className="text-orange-400">+</span>
-          </h2>
-          <p className="mt-3 text-sm text-gray-400 leading-relaxed">
-            Plateforme de coaching et de réservation de séances en ligne.
-            Planifiez vos rendez-vous, suivez vos disponibilités et gérez vos
-            clients en toute simplicité.
+          <h3 className="text-lg font-serif font-semibold">
+            Coaching Chelsea
+          </h3>
+          <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+            Accompagnement en douceur pour retrouver clarté, confiance
+            et alignement dans votre vie personnelle et professionnelle.
+          </p>
+          <p className="mt-3 text-xs text-slate-400">
+            INF1743-SO Développement d’applications web.
           </p>
         </div>
 
-        {/* Colonne 2 : Navigation */}
+        {/* Colonne 2 : Horaires (remplace Navigation) */}
         <div>
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
-            Navigation
-          </h3>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li>
-              <Link
-                to="/"
-                className="hover:text-white hover:underline underline-offset-4"
-              >
-                Accueil
-              </Link>
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
+            Horaires des rendez-vous
+          </h4>
+
+          <ul className="mt-4 space-y-2 text-sm text-slate-200">
+            <li className="flex justify-between">
+              <span>Lundi – Vendredi</span>
+              <span className="text-slate-300">09h00 – 18h00</span>
             </li>
-            <li>
-              <Link
-                to="/offres"
-                className="hover:text-white hover:underline underline-offset-4"
-              >
-                Nos offres
-              </Link>
+            <li className="flex justify-between">
+              <span>Samedi</span>
+              <span className="text-slate-300">10h00 – 15h00</span>
             </li>
-            <li>
-              <Link
-                to="/disponibilites"
-                className="hover:text-white hover:underline underline-offset-4"
-              >
-                Disponibilités
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/mes-reservations"
-                className="hover:text-white hover:underline underline-offset-4"
-              >
-                Mes réservations
-              </Link>
+            <li className="flex justify-between">
+              <span>Dimanche</span>
+              <span className="text-slate-400 italic">Fermé</span>
             </li>
           </ul>
+
+          <p className="mt-3 text-xs text-slate-400">
+            Les créneaux exacts sont à vérifier dans la page{" "}
+            <Link
+              to="/disponibilites"
+              className="underline hover:text-orange-300"
+            >
+              Disponibilités
+            </Link>.
+          </p>
         </div>
 
-        {/* Colonne 3 : Contact & réseaux */}
+        {/* Colonne 3 : Contact / liens utiles */}
         <div>
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wide">
+          <h4 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
             Contact
-          </h3>
-          <ul className="mt-3 space-y-2 text-sm">
-            <li className="flex items-center gap-2">
-              <Mail size={16} />
-              <span>contact@coachplus.com</span>
+          </h4>
+
+          <ul className="mt-4 space-y-2 text-sm text-slate-200">
+            <li>
+              📧{" "}
+              <a
+                href="mailto:chelsea.coach@example.com"
+                className="hover:text-orange-300 transition-colors"
+              >
+                chelsea.coach@example.com
+              </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Phone size={16} />
-              <span>+1 (514) 000-0000</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin size={16} />
-              <span>Montréal, Québec</span>
-            </li>
+            <li>📞 +1 (438) 555-1234</li>
+            <li>📍 Montréal, Québec</li>
           </ul>
 
-          <h4 className="text-sm font-semibold text-white mt-4">
-            Suivez-nous
-          </h4>
-          <div className="mt-2 flex items-center gap-3">
-            <button className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-white hover:text-white transition-colors">
-              <Facebook size={16} />
-            </button>
-            <button className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-white hover:text-white transition-colors">
-              <Instagram size={16} />
-            </button>
-            <button className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-white hover:text-white transition-colors">
-              <Linkedin size={16} />
-            </button>
+          <div className="mt-4 flex gap-3 text-xl">
+            <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm hover:bg-slate-700 cursor-pointer">
+              f
+            </span>
+            <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm hover:bg-slate-700 cursor-pointer">
+              in
+            </span>
+            <span className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-sm hover:bg-slate-700 cursor-pointer">
+              🌐
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Bas de page */}
+      {/* Barre du bas */}
       <div className="border-t border-slate-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-          <p>© {annee} Coach+. Tous droits réservés.</p>
-          <div className="flex items-center gap-4">
-            <button className="hover:text-gray-300">
-              Mentions légales
-            </button>
-            <button className="hover:text-gray-300">
-              Politique de confidentialité
-            </button>
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex flex-col md:flex-row items-center justify-between gap-2">
+          <p className="text-xs text-slate-500">
+            © {new Date().getFullYear()} Coaching Chelsea – Tous droits réservés.
+          </p>
+          <div className="flex gap-4 text-xs text-slate-500">
+            <span>Mentions légales</span>
+            <span>Politique de confidentialité</span>
           </div>
         </div>
       </div>

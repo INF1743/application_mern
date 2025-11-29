@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { api, setAuthToken } from "../services/api";
 import { Link, useNavigate } from "react-router-dom";
-
+import Footer from "../components/Footer";
 export default function Register() {
   const navigate = useNavigate();
   const [nom, setNom] = useState("");
@@ -137,6 +137,7 @@ export default function Register() {
           </p>
         </form>
       </div>
+      <Footer />
     </div>
   );
 }

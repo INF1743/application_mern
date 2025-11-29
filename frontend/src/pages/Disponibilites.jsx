@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { api } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function Disponibilites() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function Disponibilites() {
   // Date sélectionnée
   const [date, setDate] = useState(() => {
     const d = new Date();
-    return d.toISOString().substring(0, 10);
+    return d.toISOString().substring(0, 10); // "YYYY-MM-DD"
   });
 
   // Type sélectionné via SELECT
@@ -20,19 +21,79 @@ export default function Disponibilites() {
   const [erreur, setErreur] = useState("");
 
   // ==============================
-  // Vérifier si une date est passée
+  // Vérifier si une date est passée (en local)
   // ==============================
   const dateEstPassee = (dateStr) => {
     const aujourdHui = new Date();
     aujourdHui.setHours(0, 0, 0, 0);
 
-    const dateChoisie = new Date(dateStr);
+    const [annee, mois, jour] = dateStr.split("-");
+    const dateChoisie = new Date(
+      Number(annee),
+      Number(mois) - 1,
+      Number(jour)
+    );
     dateChoisie.setHours(0, 0, 0, 0);
 
     return dateChoisie < aujourdHui;
   };
 
+  // ✅ Dimanche (0) en local
+  const estDimanche = (dateStr) => {
+    if (!dateStr) return false;
+    const [annee, mois, jour] = dateStr.split("-");
+    const d = new Date(Number(annee), Number(mois) - 1, Number(jour));
+    return d.getDay() === 0;
+  };
+
+  // ✅ Samedi (6) en local
+  const estSamedi = (dateStr) => {
+    if (!dateStr) return false;
+    const [annee, mois, jour] = dateStr.split("-");
+    const d = new Date(Number(annee), Number(mois) - 1, Number(jour));
+    return d.getDay() === 6;
+  };
+
+  // ✅ Affichage de la date sans bug J-1
+  const formaterDateAffichage = (dateStr) => {
+    if (!dateStr) return "";
+    const iso = dateStr.slice(0, 10); // "YYYY-MM-DD"
+    const [annee, mois, jour] = iso.split("-");
+    return `${jour}/${mois}/${annee}`;
+  };
+
   const bloquerReservation = dateEstPassee(date);
+
+  // ✅ Gestion du changement de date : on empêche de choisir un dimanche
+  const handleDateChange = (e) => {
+    const valeur = e.target.value;
+    if (!valeur) return;
+
+    if (estDimanche(valeur)) {
+      setErreur(
+        "Les rendez-vous ne sont pas disponibles le dimanche. Merci de choisir un jour du lundi au samedi."
+      );
+      // On NE change pas la date sélectionnée
+      return;
+    }
+
+    setErreur("");
+    setDate(valeur);
+  };
+
+  // ==============================
+  // Filtre des créneaux du samedi (10h–14h)
+  // ==============================
+  const filtrerCreneauxSamedi = (liste) => {
+    return liste.filter((c) => {
+      if (!c.heure || typeof c.heure !== "string") return false;
+      // On prend les 2 premiers chiffres de l'heure, par ex. "09:00", "10h00", "14:30"
+      const match = c.heure.match(/^(\d{1,2})/);
+      if (!match) return false;
+      const h = parseInt(match[1], 10);
+      return h >= 10 && h <= 14;
+    });
+  };
 
   // ==============================
   // Charger les créneaux depuis API
@@ -48,9 +109,26 @@ export default function Disponibilites() {
       return;
     }
 
+    // Sécurité supplémentaire pour le dimanche
+    if (estDimanche(date)) {
+      setCreneaux([]);
+      setErreur(
+        "Aucun rendez-vous n’est proposé le dimanche. Merci de choisir un autre jour."
+      );
+      setChargement(false);
+      return;
+    }
+
     try {
       const res = await api.get(`/reservations/creneaux?date=${date}`);
-      setCreneaux(res.data);
+      let liste = res.data;
+
+      // ✅ Si c'est samedi, on garde seulement 10h–14h
+      if (estSamedi(date)) {
+        liste = filtrerCreneauxSamedi(liste);
+      }
+
+      setCreneaux(liste);
     } catch (err) {
       setErreur(
         err?.response?.data?.message ||
@@ -77,6 +155,23 @@ export default function Disponibilites() {
       return;
     }
 
+    if (estDimanche(date)) {
+      setErreur("Les rendez-vous ne sont pas disponibles le dimanche.");
+      return;
+    }
+
+    // ✅ Sécurité : même si un horaire bizarre passe un samedi, on bloque
+    if (estSamedi(date)) {
+      const match = typeof heure === "string" ? heure.match(/^(\d{1,2})/) : null;
+      const h = match ? parseInt(match[1], 10) : NaN;
+      if (isNaN(h) || h < 10 || h > 14) {
+        setErreur(
+          "Le samedi, les rendez-vous sont possibles uniquement entre 10h et 14h."
+        );
+        return;
+      }
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
@@ -86,7 +181,11 @@ export default function Disponibilites() {
     try {
       await api.post("/reservations", { date, heure, type });
       await chargerCreneaux();
-      alert(`Réservation confirmée pour ${date} à ${heure}`);
+      alert(
+        `Réservation confirmée pour le ${formaterDateAffichage(
+          date
+        )} à ${heure}`
+      );
     } catch (err) {
       setErreur(
         err?.response?.data?.message ||
@@ -109,6 +208,9 @@ export default function Disponibilites() {
         <p className="text-gray-600 mt-2">
           Choisissez une date, un type de rendez-vous et un créneau disponible.
         </p>
+        <p className="text-xs text-gray-500 mt-1">
+          Rendez-vous disponibles du lundi au vendredi (9h–18h) et le samedi (10h–14h). Dimanche fermé.
+        </p>
 
         {/* --- SÉLECTION DATE --- */}
         <section className="mt-6 bg-white p-5 rounded-xl shadow-sm border">
@@ -125,7 +227,7 @@ export default function Disponibilites() {
             <input
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={handleDateChange}
               className="border rounded-lg px-3 py-2 text-gray-700 w-full md:w-auto"
             />
           </div>
@@ -161,10 +263,10 @@ export default function Disponibilites() {
           </div>
         )}
 
-        {/* --- LISTE DES CRENEAUX --- */}
+        {/* --- LISTE DES CRÉNEAUX --- */}
         <section className="mt-8">
           <h2 className="text-xl font-bold text-gray-900">
-            Créneaux disponibles le {new Date(date).toLocaleDateString("fr-CA")}
+            Créneaux disponibles le {formaterDateAffichage(date)}
           </h2>
 
           {chargement ? (
@@ -196,9 +298,13 @@ export default function Disponibilites() {
                   </div>
 
                   <button
-                    disabled={!c.dispo || bloquerReservation}
+                    disabled={
+                      !c.dispo || bloquerReservation || estDimanche(date)
+                    }
                     className={`px-4 py-2 rounded-md font-semibold ${
-                      c.dispo && !bloquerReservation
+                      c.dispo &&
+                      !bloquerReservation &&
+                      !estDimanche(date)
                         ? "bg-orange-400 hover:bg-orange-500 text-white"
                         : "bg-gray-300 text-gray-600 cursor-not-allowed"
                     }`}
@@ -212,6 +318,8 @@ export default function Disponibilites() {
           )}
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 }
