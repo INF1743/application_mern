@@ -1,5 +1,4 @@
-
- Technologies utilisées
+🛠️ Technologies utilisées
 Backend
 Node.js
 Express.js
@@ -17,22 +16,22 @@ Git & GitHub
 VS Code
 MongoDB Atlas
 Postman (tests API)
- Répartition des tâches dans l’équipe
- Fatoumata — Responsable du Front-End
+👥 Répartition des tâches dans l’équipe
+👩‍💻 Fatoumata — Responsable du Front-End
 Développement des pages : Accueil, Contenus, Détails, Login, Register
 Intégration React Router
 Gestion des appels API via Axios
 Design, responsivité & UI/UX
 Gestion des états et interactions utilisateur
 Contribution principale : Frontend complet
- Mamadou Oury — Backend & intégration
+🧑‍💻 Mamadou Oury — Backend & intégration
 Structure initiale du backend
 Configuration Express
 Création des premières routes (authentification, contenus)
 Connexion MongoDB & modèles initiaux
 Ajustements sur certaines pages du frontend (ex: Offres)
 Contribution principale : Structure backend + routes initiales + ajustements frontend
- Yvanelle — Développeuse Backend principale
+👩‍💻 Yvanelle — Développeuse Backend principale
 Développement complet de la page Offres
 Création du système de réservations :
 Route POST /api/reservations
@@ -45,36 +44,27 @@ Mise à jour de server.js
 Tests via Postman
 Rédaction de la documentation (README.md)
 Contribution principale : Finalisation backend, système de réservation, emails & documentation
- Respect des exigences du projet
+📋 Respect des exigences du projet
 Le projet respecte toutes les contraintes du cours :
 ✔ Architecture MERN complète
-
 ✔ API REST sécurisée (JWT)
-
 ✔ Minimum 2 collections MongoDB
-
 ✔ CRUD complet : Auth + Réservation
-
 ✔ React Router pour la navigation
-
 ✔ Gestion des formulaires côté frontend
-
 ✔ Collaboration Git/GitHub (1 branche par membre)
-
 ✔ Evidence des contributions
-
 ✔ Préparation au déploiement
- Déploiement prévu
+🌐 Déploiement prévu
 Service	Plateforme
 Frontend	Netlify
 Backend	Render / Railway
 Base de données	MongoDB Atlas
- Conclusion
+🏁 Conclusion
 Ce projet a permis à l’équipe de :
 Développer une application MERN complète et fonctionnelle
 Collaborer efficacement via GitHub
 Intégrer API, React et MongoDB
 Répondre à toutes les exigences du projet intégrateur
 Acquérir une expérience professionnelle en développement Full-Stack
-Un excellent travail d’équipe, structuré et abouti 
- 
+Un excellent travail d’équipe, structuré et abouti 👏🔥
