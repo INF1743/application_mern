@@ -1,160 +1,80 @@
-# Application de Coaching Personnel – Projet Full-Stack MERN
 
-## Description du projet
-
-Ce projet est une application web MERN permettant à une coach de vie d'offrir des services en ligne.  
-L’utilisateur peut :
-
-- Créer un compte et se connecter
-- Accéder aux offres de coaching
-- Consulter les informations présentées dans les pages (Accueil, Offres, etc.)
-- Réserver une séance de coaching en ligne
-- Recevoir automatiquement un courriel de confirmation après la réservation
-
-Le but du projet était de mettre en œuvre les compétences acquises dans le cadre du cours **Projet Intégrateur — Application Web Full-Stack (MERN)** :contentReference[oaicite:1]{index=1} :
-- Construction d’une API REST sécurisée (Express + MongoDB)
-- Intégration frontend en React
-- Gestion de l’authentification (JWT)
-- Collaboration Git/GitHub en équipe
-- Déploiement en production 
-
-
-
-## 📌 Instructions d'installation
-
-### 1️⃣ Cloner le dépôt
-```bash
-git clone https://github.com/ourymali966-ui/application_mern.git
-
-# Installation des dépendances
+ Technologies utilisées
 Backend
-cd backend
-npm install
-
+Node.js
+Express.js
+MongoDB + Mongoose
+JWT (authentification)
+Bcrypt (hashing)
+Nodemailer (envoi de courriels)
 Frontend
-cd ../frontend
-npm install
-
-# Configuration du fichier .env (backend)
-
-Créer un fichier .env dans backend/ contenant :
-
-PORT=5000
-MONGO_URI=<votre_url_mongodb>
-JWT_SECRET=<secret_jwt>
-
-# SMTP pour l'envoi des emails
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=<compte_google>
-SMTP_PASS=<mot_de_passe_application_google>
-EMAIL_FROM="Chelsea (Coach de vie)" <adresse_email>
-
-###  Lancer l'application en local
-
-pour  Lancer le backend (API Node/Express)
-
-cd backend
-npm install # Lancer le back end  
-
-Pour Lancer le frontend (React)
-
-cd frontend
-npm start       # Lancer l'application React
-
-Technologies utilisées
-pour le  Backend nous avons utilisées: Node.js, Express.js. MongoDB + Mongoose, JWT, Bcrypt et Nodemailer.
- 
-Pour le Frontend nous avons utilisées: React.js,  React Router, Axios, CSS/Tailwind
-
-Les outils utilisées sont: Git & GitHub, Vs Code, MongoDB Atlas, Postman (tests API)
-
-
- Répartition des tâches dans l’équipe:
-
-Fatoumata
-
-Responsable du Front-End
-
+React.js
+React Router
+Axios
+TailwindCSS
+Outils
+Git & GitHub
+VS Code
+MongoDB Atlas
+Postman (tests API)
+ Répartition des tâches dans l’équipe
+ Fatoumata — Responsable du Front-End
 Développement des pages : Accueil, Contenus, Détails, Login, Register
-
-Intégration avec React Router
-
+Intégration React Router
 Gestion des appels API via Axios
-
-Création de l’interface utilisateur et design
-
-Responsivité et structure visuelle
-
+Design, responsivité & UI/UX
 Gestion des états et interactions utilisateur
-
 Contribution principale : Frontend complet
-
-Mamadou Oury
-
-Travail initial sur le Backend
-
-Installation et configuration initiale d’Express
-
-Mise en place des premières routes (authentification, contenus)
-
-Connexion MongoDB et création des premiers modèles
-
-Organisation de la structure backend
-
-Ajustements front-end sur certaines pages (notamment Offres)
-
-Contribution principale : Structure backend + routes initiales + pages frontend
-
- Yvanelle
-
-Responsable des ajouts majeurs sur le backend
-
-Developpement de la page offres
-
+ Mamadou Oury — Backend & intégration
+Structure initiale du backend
+Configuration Express
+Création des premières routes (authentification, contenus)
+Connexion MongoDB & modèles initiaux
+Ajustements sur certaines pages du frontend (ex: Offres)
+Contribution principale : Structure backend + routes initiales + ajustements frontend
+ Yvanelle — Développeuse Backend principale
+Développement complet de la page Offres
 Création du système de réservations :
-
 Route POST /api/reservations
-
 Contrôleur reservation.controller.js
+Validation des données
+Envoi automatique de courriels :
+Setup SMTP + Nodemailer
+Ajout des variables d’environnement
+Mise à jour de server.js
+Tests via Postman
+Rédaction de la documentation (README.md)
+Contribution principale : Finalisation backend, système de réservation, emails & documentation
+ Respect des exigences du projet
+Le projet respecte toutes les contraintes du cours :
+✔ Architecture MERN complète
 
-Validation et traitement des données envoyées par le frontend
+✔ API REST sécurisée (JWT)
 
-Mise en place de l’envoi automatique de courriels avec Nodemailer
+✔ Minimum 2 collections MongoDB
 
-Configuration SMTP + variables d'environnement
+✔ CRUD complet : Auth + Réservation
 
-Mise à jour de server.js pour intégrer les nouvelles routes
+✔ React Router pour la navigation
 
-Tests Postman
+✔ Gestion des formulaires côté frontend
 
-Documentation (README.md)
+✔ Collaboration Git/GitHub (1 branche par membre)
 
-Contribution principale : Finalisation backend + système réservation + Documentation + envoi d’emails
+✔ Evidence des contributions
 
-# Respect des exigences du projet
-
- Notre application respecte les éléments suivants :
-
-Architecture MVC simplifiée ,  API REST sécurisée avec JWT, Minimum 2 collections MongoDB,  CRUD (authentification + réservation), React Router pour la navigation, Gestion des formulaires côté frontend
- Collaboration Git/GitHub avec une branche par membre,  Présentation du travail de chaque membre
-
-Déploiement en production prévu :
-
-Frontend → Netlify
-
-Backend → Render / Railway
-
-Base de données → MongoDB Atlas
-
-#Conclusion
-
-Ce projet a permis aux membres de l’équipe :
-
-de développer une application MERN complète
-
-de collaborer efficacement via GitHub
-
-d’intégrer une API, une interface React et une BD MongoDB
-
-de respecter les exigences académiques du projet intégrateur
+✔ Préparation au déploiement
+ Déploiement prévu
+Service	Plateforme
+Frontend	Netlify
+Backend	Render / Railway
+Base de données	MongoDB Atlas
+ Conclusion
+Ce projet a permis à l’équipe de :
+Développer une application MERN complète et fonctionnelle
+Collaborer efficacement via GitHub
+Intégrer API, React et MongoDB
+Répondre à toutes les exigences du projet intégrateur
+Acquérir une expérience professionnelle en développement Full-Stack
+Un excellent travail d’équipe, structuré et abouti 
+ 
