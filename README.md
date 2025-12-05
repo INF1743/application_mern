@@ -91,6 +91,7 @@ backend/
 │── config/             # Connexion MongoDB, variables d'environnement
 │── server.js           # Point d’entrée du serveur Express
 └── .env.example        # Exemple de configuration d'environnement
+
 frontend/
 │── src/
 │   ├── pages/          # Pages : Accueil, Login, Register, Contenus, Détails, Offres
