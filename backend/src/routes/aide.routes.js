@@ -1,11 +1,10 @@
 import { Router } from "express";
 import {
   envoyerMessageAide,
-  listerMessagesAide,
-  marquerTraitre,
+  listerMessagesAide
 } from "../controllers/aide.controller.js";
 
-import { authRequired } from "../middlewares/auth.middleware.js"; // ✅ corrigé
+import { authRequired } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -21,12 +20,5 @@ router.post("/", envoyerMessageAide);
  * @access Privé
  */
 router.get("/", authRequired, listerMessagesAide);
-
-/**
- * @route PATCH /api/aide/:id/traiter
- * @desc Marquer un message comme traité
- * @access Privé
- */
-router.patch("/:id/traiter", authRequired, marquerTraitre);
 
 export default router;

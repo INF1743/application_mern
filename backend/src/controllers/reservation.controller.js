@@ -1,5 +1,5 @@
 import Reservation from "../modeles/Reservation.js";
-import { envoyerMailReservation } from "../utils/mailer.js";
+import { envoyerMailConfirmationClient } from "../utils/mailer.js";
 
 // Création de réservation
 export const creerReservation = async (req, res) => {
@@ -46,9 +46,9 @@ export const creerReservation = async (req, res) => {
       type
     };
 
-    // 🔔 Envoi de l'unique email (client)
+    // 🔔 Envoi de l'email de confirmation au client
     try {
-      await envoyerMailReservation(infosMail);
+      await envoyerMailConfirmationClient(infosMail);
     } catch (err) {
       console.error("❌ Erreur mail client :", err);
     }
