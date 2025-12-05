@@ -1,6 +1,6 @@
 # Projet MERN – Plateforme de Réservation et Gestion de Contenus
 
-Ce projet est une application complète développée avec l’architecture MERN (MongoDB, Express.js, React, Node.js).  
+Ce projet est une application complète développée avec l’architecture MERN (MongoDB, Express.js, React, Node.js).
 Il permet la gestion des utilisateurs, la consultation de contenus, les réservations en ligne et l’envoi automatique d’emails de confirmation.
 
 ---
@@ -83,6 +83,7 @@ Il permet la gestion des utilisateurs, la consultation de contenus, les réserva
 ## 4. Structure du projet
 
 ### Backend
+```text
 backend/
 │── controllers/        # Logique métier (auth, réservations, contenus, etc.)
 │── models/             # Modèles Mongoose (User, Reservation, Content...)
@@ -90,9 +91,6 @@ backend/
 │── config/             # Connexion MongoDB, variables d'environnement
 │── server.js           # Point d’entrée du serveur Express
 └── .env.example        # Exemple de configuration d'environnement
-
-
-### Frontend
 frontend/
 │── src/
 │   ├── pages/          # Pages : Accueil, Login, Register, Contenus, Détails, Offres
@@ -101,81 +99,61 @@ frontend/
 │   └── App.jsx         # Composant principal
 │
 └── package.json        # Dépendances frontend
+5. Installation et exécution
+5.1 Cloner le projet
+git clone https://github.com/ourymali966-ui/application_mern.git
+cd application_mern
 
-
-## 5. Installation et exécution
-
-### 5.1 Cloner le projet
-
-
-git clone <https://github.com/ourymali966-ui/application_mern.git>
-cd project
-
-
-### 5.2 Installation Backend
-
-
+5.2 Installation Backend
 cd backend
 npm install
 
 
-Créer un fichier `.env` :
-
+Créer un fichier .env :
 
 PORT=5000
-MONGO_URI=mongodb+srv://admin:621601518@cluster0.vb4lkh3.mongodb.net/?appName=Cluster0
-JWT_SECRET=un_super_secret
+MONGO_URI=VOTRE_MONGO_URI_ICI
+JWT_SECRET=VOTRE_JETON_SECRET_ICI
 
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_USER=wbah879@gmail.com
-SMTP_PASS=hjuuhewdfxzpyqiy
+SMTP_USER=VOTRE_EMAIL_SMTP
+SMTP_PASS=VOTRE_MOT_DE_PASSE_APPLI
 
-EMAIL_ADMIN=wbah879@gmail.com
+EMAIL_ADMIN=EMAIL_ADMIN_NOTIFICATION
+
 
 Démarrer le serveur :
 
-
 npm start
 
-
-### 5.3 Installation Frontend
-
-
-cd frontend
+5.3 Installation Frontend
+cd ../frontend
 npm install
 npm start
 
 
-L’application sera accessible à l’adresse :  
+L’application sera accessible à l’adresse :
 http://localhost:3000
 
----
-
-## 6. Déploiement prévu
-
-| Service            | Plateforme        |
-|--------------------|------------------|
-| Frontend           | Netlify          |
-| Backend            | Render / Railway |
-| Base de données    | MongoDB Atlas    |
-
----
-
-## 7. Tests API
+6. Déploiement prévu
+Service	Plateforme
+Frontend	Netlify
+Backend	Render / Railway
+Base de données	MongoDB Atlas
+7. Tests API
 
 Routes testables via Postman :
 
-- POST /api/auth/register  
-- POST /api/auth/login  
-- POST /api/reservations  
-- GET /api/contenus  
+POST /api/auth/register
 
----
+POST /api/auth/login
 
-## 8. Conclusion
+POST /api/reservations
 
-Ce projet a permis de développer une application MERN complète et fonctionnelle.  
+GET /api/contenus
+
+8. Conclusion
+
+Ce projet a permis de développer une application MERN complète et fonctionnelle.
 La collaboration via GitHub, la séparation claire Backend/Frontend et l’utilisation d’outils professionnels ont permis de répondre à toutes les exigences du projet intégrateur.
-
-Le résultat final est une plateforme moderne, performante et prête à être déployée.
