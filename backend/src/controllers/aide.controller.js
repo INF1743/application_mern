@@ -1,69 +1,97 @@
 import AideMessage from "../modeles/AideMessage.js";
 
-/**
- * @route POST /api/aide
- * @desc Permet à un utilisateur d'envoyer un message d'aide
- * @access Public
- */
+import { envoyerMailConfirmationAide } from "../utils/mailer.js";
+ 
+// 📨 POST /api/aide  — un utilisateur envoie une demande d’aide
+
 export const envoyerMessageAide = async (req, res) => {
+
   try {
+
     const { nom, email, message } = req.body;
-
+ 
     if (!nom || !email || !message) {
+
       return res
+
         .status(400)
-        .json({ message: "Tous les champs sont requis." });
+
+        .json({ message: "Nom, email et message sont obligatoires." });
+
     }
+ 
+    // Enregistrer dans MongoDB
 
-    await AideMessage.create({ nom, email, message });
+    const aide = await AideMessage.create({
 
+      nom,
+
+      email,
+
+      message
+
+    });
+ 
+    // Envoyer un mail de confirmation au client
+
+    try {
+
+      await envoyerMailConfirmationAide({ nom, email });
+
+    } catch (err) {
+
+      console.error("❌ Erreur lors de l’envoi du mail d’aide au client :", err);
+
+      // On ne bloque pas la réponse pour une erreur de mail
+
+    }
+ 
     return res.status(201).json({
-      message: "Message reçu. Nous vous répondrons dès que possible.",
-    });
-  } catch (err) {
-    console.error("Erreur envoyerMessageAide:", err.message);
-    return res.status(500).json({ message: "Erreur serveur." });
-  }
-};
 
-/**
- * @route GET /api/aide
- * @desc Lister tous les messages d'aide (admin/coach)
- * @access Privé (authRequired)
- */
+      message:
+
+        "Votre message a bien été envoyé. Vous recevrez un courriel de confirmation.",
+
+      aide
+
+    });
+
+  } catch (err) {
+
+    console.error("❌ ERREUR AIDE :", err);
+
+    return res
+
+      .status(500)
+
+      .json({ message: "Erreur serveur lors de l’envoi du message." });
+
+  }
+
+};
+ 
+// (Optionnel) GET /api/aide/messages — pour la page admin
+
 export const listerMessagesAide = async (req, res) => {
+
   try {
+
     const messages = await AideMessage.find().sort({ createdAt: -1 });
-    return res.json(messages);
+
+    res.json(messages);
+
   } catch (err) {
-    console.error("Erreur listerMessagesAide:", err.message);
-    return res.status(500).json({ message: "Erreur serveur." });
+
+    console.error("❌ ERREUR LISTE AIDE :", err);
+
+    res
+
+      .status(500)
+
+      .json({ message: "Erreur serveur lors du chargement des messages." });
+
   }
+
 };
 
-/**
- * @route PATCH /api/aide/:id/traiter
- * @desc Marquer un message comme traité
- * @access Privé (authRequired)
- */
-export const marquerTraitre = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const msg = await AideMessage.findById(id);
-    if (!msg) {
-      return res.status(404).json({ message: "Message introuvable." });
-    }
-
-    msg.statut = "Traité";
-    await msg.save();
-
-    return res.json({
-      message: "Message marqué comme traité.",
-      msg,
-    });
-  } catch (err) {
-    console.error("Erreur marquerTraitre:", err.message);
-    return res.status(500).json({ message: "Erreur serveur." });
-  }
-};
+ 

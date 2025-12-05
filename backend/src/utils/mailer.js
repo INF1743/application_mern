@@ -1,63 +1,147 @@
-// backend/src/utils/mailer.js
-
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-// Création du transporteur SMTP
+ 
 const transporter = nodemailer.createTransport({
+
   host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: false, // false = TLS STARTTLS
+
+  port: process.env.SMTP_PORT,
+
   auth: {
+
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
 
-/**
- * Envoie un email de confirmation au client
- * @param {Object} param0
- * @returns {Promise<void>}
- */
-export async function envoyerMailReservation({ nomClient, emailClient, date, heure }) {
-  try {
-    const sujet = "Merci pour votre réservation !";
+    pass: process.env.SMTP_PASS
 
-    const texte = `
-Bonjour ${nomClient},
-
-Votre séance pour le ${date} à ${heure} est confirmée 🎉
-
-Nous avons hâte de vous rencontrer !
-
-Cordialement,
-Chelsea (Coach de vie)
-`;
-
-    const html = `
-<p>Bonjour <b>${nomClient}</b>,</p>
-<p>Votre séance pour le <b>${date}</b> à <b>${heure}</b> est <span style="color:green;font-weight:bold;">confirmée 🎉</span></p>
-<p>Nous avons hâte de vous rencontrer.</p>
-<br/>
-<p>Cordialement,</p>
-<p><b>Chelsea — Coach de vie</b></p>
-`;
-
-    // Envoi du mail
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM || `"INF1743 Coaching" <${process.env.SMTP_USER}>`,
-      to: emailClient,
-      subject: sujet,
-      text: texte,
-      html: html,
-    });
-
-    console.log(`📧 Email envoyé à ${emailClient}`);
-
-  } catch (error) {
-    console.error("❌ Erreur envoi email :", error);
-    throw new Error("Impossible d'envoyer l'email de réservation.");
   }
-}
+
+});
+ 
+// =======================
+
+// 📩 Réservation : mail à l’admin
+
+// =======================
+
+export const envoyerMailAdminReservation = async ({
+
+  nomClient,
+
+  emailClient,
+
+  date,
+
+  heure,
+
+  type
+
+}) => {
+
+  await transporter.sendMail({
+
+    from: `"Nouveau rendez-vous" <${process.env.SMTP_USER}>`,
+
+    to: process.env.EMAIL_ADMIN,
+
+    subject: "📅 Nouvelle réservation confirmée",
+
+    html: `
+<h2>Nouvelle réservation confirmée</h2>
+<p><strong>Client :</strong> ${nomClient}</p>
+<p><strong>Email :</strong> ${emailClient}</p>
+<p><strong>Date :</strong> ${date}</p>
+<p><strong>Heure :</strong> ${heure}</p>
+<p><strong>Type :</strong> ${type}</p>
+
+    `
+
+  });
+
+};
+ 
+// =======================
+
+// 📩 Réservation : mail au client
+
+// =======================
+
+export const envoyerMailConfirmationClient = async ({
+
+  nomClient,
+
+  emailClient,
+
+  date,
+
+  heure,
+
+  type
+
+}) => {
+
+  if (!emailClient) return;
+ 
+  await transporter.sendMail({
+
+    from: `"Chelsea Coaching" <${process.env.SMTP_USER}>`,
+
+    to: emailClient,
+
+    subject: "✨ Votre rendez-vous est confirmé",
+
+    html: `
+<h2>Bonjour ${nomClient},</h2>
+<p>Merci pour votre confiance.</p>
+<p>Votre rendez-vous est bien confirmé avec <strong>Chelsea Coaching</strong>.</p>
+ 
+      <p><strong>Date :</strong> ${date}</p>
+<p><strong>Heure :</strong> ${heure}</p>
+<p><strong>Type de rendez-vous :</strong> ${type}</p>
+ 
+      <p>Si vous avez une question avant la séance, vous pouvez répondre directement à ce courriel.</p>
+ 
+      <p>À très bientôt,<br>
+
+      Chelsea</p>
+
+    `
+
+  });
+
+};
+ 
+// =======================
+
+// 📩 Aide : mail de confirmation au client
+
+// =======================
+
+export const envoyerMailConfirmationAide = async ({ nom, email }) => {
+
+  if (!email) return;
+ 
+  await transporter.sendMail({
+
+    from: `"Chelsea Coaching" <${process.env.SMTP_USER}>`,
+
+    to: email,
+
+    subject: "📬 Nous avons bien reçu votre message",
+
+    html: `
+<h2>Bonjour ${nom || "cher client"},</h2>
+<p>Merci d'avoir pris contact avec <strong>Chelsea Coaching</strong>.</p>
+<p>Nous avons bien reçu votre message et nous vous répondrons dès que possible.</p>
+ 
+      <p>En attendant, merci pour votre confiance.</p>
+ 
+      <p>Chaleureusement,<br>
+
+      Chelsea</p>
+
+    `
+
+  });
+
+};
+
+ 
