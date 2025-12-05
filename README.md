@@ -82,24 +82,31 @@ Il permet la gestion des utilisateurs, la consultation de contenus, les réserva
 
 ## 4. Structure du projet
 
-/project
-│── backend
-│ ├── controllers
-│ ├── models
-│ ├── routes
-│ ├── config
-│ ├── server.js
-│ └── .env.example
-│
-│── frontend
-│ ├── src
-│ │ ├── pages
-│ │ ├── components
-│ │ ├── services
-│ │ └── App.jsx
-│ └── package.json
-│
-└── README.md
+/## Structure du projet
+
+Le projet est organisé en deux parties principales : le backend (API) et le frontend (interface utilisateur).
+
+### Backend
+backend/
+        controllers/        # Logique métier (auth, réservations, contenus, etc.)
+        models/             # Modèles Mongoose (User, Reservation, Content...)
+        routes/             # Définition des routes Express
+        config/             # Connexion MongoDB, variables d'environnement
+        server.js           # Point d’entrée du serveur Express
+        .env.example        # Exemple de configuration environnement
+
+### Frontend
+frontend/
+        src/
+        pages/          # Pages : Accueil, Login, Register, Contenus, Détails, Offres
+        components/     # Composants réutilisables
+        services/       # Appels API via Axios
+        App.jsx         # Composant principal
+
+        package.json        # Dépendances frontend
+
+### Racine du projet
+README.md               # Documentation du projet
 
 
 ---
