@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
 import { setAuthToken } from "./services/api";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
 
 const token = localStorage.getItem("token");
 if (token) {
