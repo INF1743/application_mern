@@ -1,147 +1,107 @@
-Projet MERN – Plateforme de Réservation et Gestion de Contenus
+# Projet MERN – Plateforme de Réservation et Gestion de Contenus
 
-Ce projet est une application complète développée avec l’architecture MERN (MongoDB, Express.js, React, Node.js).
+Ce projet est une application complète développée avec l’architecture MERN (MongoDB, Express.js, React, Node.js).  
 Il permet la gestion des utilisateurs, la consultation de contenus, les réservations en ligne et l’envoi automatique d’emails de confirmation.
 
-1. Technologies utilisées
-Backend
+---
 
-Node.js
+## 1. Technologies utilisées
 
-Express.js
+### Backend
+- Node.js  
+- Express.js  
+- MongoDB + Mongoose  
+- JWT (authentification sécurisée)  
+- Bcrypt (hashing des mots de passe)  
+- Nodemailer (envoi de courriels automatiques)
 
-MongoDB + Mongoose
+### Frontend
+- React.js  
+- React Router  
+- Axios  
+- TailwindCSS  
 
-JWT (authentification sécurisée)
+### Outils et environnement
+- Visual Studio Code  
+- Git & GitHub  
+- MongoDB Atlas  
+- Postman (tests API)
 
-Bcrypt (hashing des mots de passe)
+---
 
-Nodemailer (envoi de courriels automatiques)
+## 2. Fonctionnalités principales
 
-Frontend
+### Côté Backend
+- Authentification (inscription, connexion, token JWT)  
+- Gestion des contenus  
+- Système de réservation :  
+  - Enregistrement d’une réservation  
+  - Validation des données  
+  - Envoi automatique d’un email à l’utilisateur  
+- Architecture REST structurée  
+- Séparation contrôleurs / routes / modèles  
 
-React.js
+### Côté Frontend
+- Pages : Accueil, Contenus, Détails, Login, Register  
+- Navigation avec React Router  
+- Appels API via Axios  
+- Formulaires avec validation  
+- Interface responsive  
+- Affichage dynamique des données provenant du backend  
 
-React Router
+---
 
-Axios
+## 3. Répartition des tâches de l’équipe
 
-TailwindCSS
+### Fatoumata — Responsable Frontend
+- Développement des pages principales  
+- Intégration de React Router  
+- Appels API Axios  
+- UX/UI et responsivité  
+- Gestion des états  
+- Contribution principale : Frontend complet  
 
-Outils et environnement
+### Mamadou Oury — Backend et intégration
+- Structure initiale du backend  
+- Configuration Express  
+- Routes d’authentification et contenus  
+- Connexion MongoDB  
+- Ajustements frontend  
+- Contribution principale : Backend + intégration  
 
-Visual Studio Code
+### Yvanelle — Développeuse Backend principale
+- Page Offres  
+- Système de réservations  
+- Nodemailer et SMTP  
+- Variables d’environnement  
+- Tests Postman  
+- Documentation  
+- Contribution principale : réservations + emails + documentation  
 
-Git & GitHub
+---
 
-MongoDB Atlas
+## 4. Structure du projet
 
-Postman (tests API)
-
-2. Fonctionnalités principales
-Côté Backend
-
-Authentification (inscription, connexion, token JWT)
-
-Gestion des contenus (selon les besoins du projet)
-
-Système de réservation :
-
-Enregistrement d’une réservation
-
-Validation des données
-
-Envoi d’un email automatique à l’utilisateur
-
-Architecture REST structurée
-
-Séparation contrôleurs / routes / modèles
-
-Côté Frontend
-
-Pages : Accueil, Contenus, Détails, Login, Register
-
-Interface React complète
-
-Navigation avec React Router
-
-Appels API via Axios
-
-Formulaires avec validation
-
-Interface responsive (mobile et desktop)
-
-Affichage des données provenant du backend
-
-3. Répartition des tâches de l’équipe
-Fatoumata — Responsable Frontend
-
-Développement des pages principales : Accueil, Contenus, Détails, Login, Register
-
-Intégration de React Router
-
-Gestion des appels API Axios
-
-Conception et intégration UI/UX
-
-Gestion des états et interactions utilisateurs
-
-Contribution principale : Frontend complet
-
-Mamadou Oury — Backend & Intégration
-
-Mise en place de la structure initiale du backend
-
-Configuration d’Express
-
-Création des premières routes d’authentification et de contenus
-
-Connexion à MongoDB et création des premiers modèles
-
-Ajustements sur certaines pages Frontend
-
-Contribution principale : Structure backend + routes initiales
-
-Yvanelle — Développeuse Backend principale
-
-Développement de la page Offres et logique associée
-
-Création du système de réservations (routes + contrôleur)
-
-Intégration complète de Nodemailer
-
-Configuration des variables d’environnement
-
-Tests via Postman
-
-Rédaction du README
-
-Contribution principale : Réservations + emails + documentation
-
-4. Structure du projet
-/project
-│── backend
-│   ├── controllers
-│   ├── models
-│   ├── routes
-│   ├── config
-│   ├── server.js
-│   └── .env.example
+backend/
+│── controllers/        # Logique métier
+│── models/             # User, Reservation, Content...
+│── routes/             # Routes Express
+│── config/             # Connexion MongoDB
+│── server.js           # Serveur principal
+└── .env.example
+frontend/
+│── src/
+│   ├── pages/          # Accueil, Login, Register, Contenus, Détails, Offres
+│   ├── components/     # Composants réutilisables
+│   ├── services/       # Appels API Axios
+│   └── App.jsx         # Composant principal
 │
-│── frontend
-│   ├── src
-│   │   ├── pages
-│   │   ├── components
-│   │   ├── services
-│   │   └── App.jsx
-│   └── package.json
-│
-└── README.md
+└── package.json
 
 5. Installation et exécution
 5.1 Cloner le projet
-git clone <URL_DU_DEPOT>
-cd project
+git clone https://github.com/ourymali966-ui/application_mern.git
+cd application_mern
 
 5.2 Installation Backend
 cd backend
@@ -150,10 +110,16 @@ npm install
 
 Créer un fichier .env :
 
-MONGO_URI=...
-JWT_SECRET=...
-SMTP_USER=...
-SMTP_PASS=...
+PORT=5000
+MONGO_URI=VOTRE_MONGO_URI_ICI
+JWT_SECRET=VOTRE_JETON_SECRET_ICI
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=VOTRE_EMAIL_SMTP
+SMTP_PASS=VOTRE_MOT_DE_PASSE_APPLI
+
+EMAIL_ADMIN=EMAIL_ADMIN_NOTIFICATION
 
 
 Démarrer le serveur :
@@ -161,12 +127,12 @@ Démarrer le serveur :
 npm start
 
 5.3 Installation Frontend
-cd frontend
+cd ../frontend
 npm install
 npm start
 
 
-L’application sera accessible sur :
+Accès au site :
 http://localhost:3000
 
 6. Déploiement prévu
@@ -176,7 +142,7 @@ Backend	Render / Railway
 Base de données	MongoDB Atlas
 7. Tests API
 
-Les routes peuvent être testées avec Postman :
+Routes testables via Postman :
 
 POST /api/auth/register
 
@@ -186,9 +152,7 @@ POST /api/reservations
 
 GET /api/contenus
 
-Un fichier de collection Postman peut être ajouté selon les besoins.
-
 8. Conclusion
 
-Ce projet a permis à l’équipe de développer une application MERN complète, fonctionnelle et sécurisée.
-La collaboration via GitHub, la gestion des branches, l’intégration Backend–Frontend et l’utilisation des outils professionnels ont permis de répondre à toutes les exigences du projet intégrateur.
+Ce projet a permis de développer une application MERN complète et fonctionnelle.
+La collaboration via GitHub, la séparation claire Backend/Frontend et l’utilisation d’outils professionnels ont permis de répondre à toutes les exigences du projet intégrateur.
