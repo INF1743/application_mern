@@ -1,14 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
- 
+import AideModal from "../components/AideModal";
+
 export default function Offres() {
   const navigate = useNavigate();
- 
+  const [aideOuvert, setAideOuvert] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
- 
+
       <main className="flex-1">
         {/* HERO OFFRES */}
         <section className="bg-white border-b">
@@ -25,7 +28,7 @@ export default function Offres() {
               est conçue pour vous offrir un cadre bienveillant, structuré et
               orienté action.
             </p>
- 
+
             <div className="mt-6 flex flex-wrap gap-3 text-sm">
               <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-50 text-green-700 border border-green-100">
                 ✔ Séances en ligne
@@ -39,7 +42,7 @@ export default function Offres() {
             </div>
           </div>
         </section>
- 
+
         {/* OFFRES PRINCIPALES */}
         <section className="bg-gray-50">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14 grid gap-8 md:grid-cols-2">
@@ -49,18 +52,18 @@ export default function Offres() {
                 <span className="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-slate-800 text-white">
                   Coach de vie personnel
                 </span>
- 
+
                 <h2 className="mt-4 text-xl md:text-2xl font-semibold text-gray-900 font-serif">
                   Retrouver clarté, équilibre et confiance au quotidien
                 </h2>
- 
+
                 <p className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed">
                   Pour les personnes qui souhaitent mieux se connaître,
                   apaiser une période de doute, clarifier leurs priorités et
                   avancer avec plus de douceur et de cohérence dans leur vie
                   personnelle.
                 </p>
- 
+
                 <ul className="mt-4 space-y-2 text-sm text-gray-700">
                   <li>• Séances d’1h en ligne, dans un cadre bienveillant</li>
                   <li>• Travail sur les émotions, les croyances et les blocages</li>
@@ -68,7 +71,7 @@ export default function Offres() {
                   <li>• Possibilité d’adapter le rythme en fonction de vos besoins</li>
                 </ul>
               </div>
- 
+
               <div className="mt-6 flex flex-col gap-3">
                 <p className="text-sm text-gray-500">
                   Idéal si vous traversez une phase de remise en question,
@@ -82,24 +85,24 @@ export default function Offres() {
                 </button>
               </div>
             </div>
- 
+
             {/* Offre 2 */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-7 flex flex-col justify-between">
               <div>
                 <span className="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full bg-slate-800 text-white">
                   Développement de carrière
                 </span>
- 
+
                 <h2 className="mt-4 text-xl md:text-2xl font-semibold text-gray-900 font-serif">
                   Clarifier votre projet professionnel et passer à l’action
                 </h2>
- 
+
                 <p className="mt-3 text-sm md:text-base text-gray-600 leading-relaxed">
                   Pour les personnes qui souhaitent faire évoluer leur carrière,
                   préparer une transition, oser un nouveau projet ou retrouver
                   du sens dans leur travail.
                 </p>
- 
+
                 <ul className="mt-4 space-y-2 text-sm text-gray-700">
                   <li>• Bilan de votre situation et de vos motivations</li>
                   <li>• Identification de vos forces et de vos axes de progression</li>
@@ -107,7 +110,7 @@ export default function Offres() {
                   <li>• Accompagnement dans les décisions et passages à l’action</li>
                 </ul>
               </div>
- 
+
               <div className="mt-6 flex flex-col gap-3">
                 <p className="text-sm text-gray-500">
                   Particulièrement adapté si vous hésitez entre plusieurs
@@ -123,7 +126,7 @@ export default function Offres() {
             </div>
           </div>
         </section>
- 
+
         {/* FORMULES & FONCTIONNEMENT */}
         <section className="bg-white border-t">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-10 md:py-14 grid gap-10 md:grid-cols-[1.2fr_1fr]">
@@ -136,7 +139,7 @@ export default function Offres() {
                 Le processus est simple et structuré, tout en restant flexible
                 pour s’adapter à votre rythme et à votre réalité.
               </p>
- 
+
               <ol className="mt-5 space-y-4 text-sm md:text-base text-gray-700">
                 <li>
                   <span className="font-semibold text-slate-800">
@@ -169,7 +172,7 @@ export default function Offres() {
                 </li>
               </ol>
             </div>
- 
+
             {/* Colonne encadré contact */}
             <div className="bg-slate-800 text-white rounded-2xl p-6 md:p-7 flex flex-col justify-between">
               <div>
@@ -182,10 +185,10 @@ export default function Offres() {
                   simplicité. Je vous répondrai dès que possible.
                 </p>
               </div>
- 
+
               <div className="mt-5 flex flex-col gap-2 text-sm">
                 <button
-                  onClick={() => navigate("/aide")}
+                  onClick={() => setAideOuvert(true)}
                   className="w-full inline-flex justify-center items-center rounded-full bg-white text-slate-900 font-semibold py-2.5 hover:bg-slate-100 transition-colors"
                 >
                   Poser une question
@@ -201,10 +204,11 @@ export default function Offres() {
           </div>
         </section>
       </main>
- 
+
+      {/* Modal d'aide */}
+      <AideModal ouvert={aideOuvert} onClose={() => setAideOuvert(false)} />
+
       <Footer />
     </div>
   );
 }
- 
- 
