@@ -4,7 +4,7 @@ import Disponibilites from "./pages/Disponibilites";
 import MesReservations from "./pages/MesReservations";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
+import Offres from "./pages/Offres";
 export default function App() {
   return (
     <BrowserRouter>
@@ -14,6 +14,7 @@ export default function App() {
         <Route path="/mes-reservations" element={<MesReservations />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/offres" element={<Offres />} />
       </Routes>
     </BrowserRouter>
   );
