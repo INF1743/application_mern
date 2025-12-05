@@ -82,8 +82,6 @@ Il permet la gestion des utilisateurs, la consultation de contenus, les réserva
 
 ## 4. Structure du projet
 
-Le projet est organisé en deux parties principales : le backend (API) et le frontend (interface utilisateur).
-
 ### Backend
 backend/
 │── controllers/        # Logique métier (auth, réservations, contenus, etc.)
@@ -91,7 +89,8 @@ backend/
 │── routes/             # Définition des routes Express
 │── config/             # Connexion MongoDB, variables d'environnement
 │── server.js           # Point d’entrée du serveur Express
-└── .env.example        # Exemple de configuration environnement
+└── .env.example        # Exemple de configuration d'environnement
+
 
 ### Frontend
 frontend/
@@ -103,10 +102,6 @@ frontend/
 │
 └── package.json        # Dépendances frontend
 
-### Racine du projet
-README.md               # Documentation du projet
-
----
 
 ## 5. Installation et exécution
 
