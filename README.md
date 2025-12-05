@@ -55,7 +55,7 @@ EMAIL_FROM="Chelsea (Coach de vie)" <adresse_email>
 pour  Lancer le backend (API Node/Express)
 
 cd backend
-npm install   
+npm install # Lancer le back end  
 
 Pour Lancer le frontend (React)
 
@@ -76,7 +76,7 @@ Fatoumata
 
 Responsable du Front-End
 
-Développement des pages : Accueil, Offres, Contenus, Détails, Login, Register
+Développement des pages : Accueil, Contenus, Détails, Login, Register
 
 Intégration avec React Router
 
@@ -109,6 +109,8 @@ Contribution principale : Structure backend + routes initiales + pages frontend
  Yvanelle
 
 Responsable des ajouts majeurs sur le backend
+
+Developpement de la page offres
 
 Création du système de réservations :
 
