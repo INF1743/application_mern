@@ -109,7 +109,7 @@ Il permet la gestion des utilisateurs, la consultation de contenus, les réserva
 ### 5.1 Cloner le projet
 
 
-git clone <URL_DU_DEPOT>
+git clone <https://github.com/ourymali966-ui/application_mern.git>
 cd project
 
 
@@ -123,11 +123,16 @@ npm install
 Créer un fichier `.env` :
 
 
-MONGO_URI=...
-JWT_SECRET=...
-SMTP_USER=...
-SMTP_PASS=...
+PORT=5000
+MONGO_URI=mongodb+srv://admin:621601518@cluster0.vb4lkh3.mongodb.net/?appName=Cluster0
+JWT_SECRET=un_super_secret
 
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=wbah879@gmail.com
+SMTP_PASS=hjuuhewdfxzpyqiy
+
+EMAIL_ADMIN=wbah879@gmail.com
 
 Démarrer le serveur :
 
