@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
+  baseURL: "https://chelsea-coaching-backend.onrender.com/api",
 });
 
 export const setAuthToken = (token) => {
